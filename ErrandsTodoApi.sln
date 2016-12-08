@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E5ADA18B-F6F2-43E2-9851-081F0F5E0FBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FE45C6EE-8C04-488B-815B-2FE6AA81F83E}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ErrandsTodoApi", "src\ErrandsTodoApi\ErrandsTodoApi.xproj", "{708D3EC2-C311-4AB0-B850-DA847F3BDBD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{708D3EC2-C311-4AB0-B850-DA847F3BDBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{708D3EC2-C311-4AB0-B850-DA847F3BDBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{708D3EC2-C311-4AB0-B850-DA847F3BDBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{708D3EC2-C311-4AB0-B850-DA847F3BDBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{708D3EC2-C311-4AB0-B850-DA847F3BDBD1} = {E5ADA18B-F6F2-43E2-9851-081F0F5E0FBE}
+	EndGlobalSection
+EndGlobal
