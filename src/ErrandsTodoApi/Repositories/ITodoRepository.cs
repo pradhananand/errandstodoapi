@@ -6,13 +6,14 @@ using ErrandsTodoApi.Models;
 
 namespace ErrandsTodoApi.Repositories
 {
-    public interface ITodoRepository
+    public interface ITodoRepository : IDisposable
     {
-        void Add(TodoItem item);
         IEnumerable<TodoItem> GetAll();
         TodoItem Find(string key);
-        TodoItem Remove(string key);
+        void Add(TodoItem item);
+        void Remove(string key);
         void Update(TodoItem item);
+        void Save();
     }
 
 }

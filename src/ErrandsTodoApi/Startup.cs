@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ErrandsTodoApi.DAL;
 using ErrandsTodoApi.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,13 @@ namespace ErrandsTodoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add DbContext
+            services.AddScoped(provider =>
+            {
+                var connectionString = Configuration["Data:SampleDb:ConnectionString"];
+                return new ErrandsDbContext(connectionString);
+            });
+
             // Add framework services.
             services.AddMvc();
 

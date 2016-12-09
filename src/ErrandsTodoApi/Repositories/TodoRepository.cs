@@ -1,50 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
 using ErrandsTodoApi.Models;
+using ErrandsTodoApi.DAL;
+using System.Linq;
+using System.Data.Entity;
 
 namespace ErrandsTodoApi.Repositories
 {
-    public class TodoRepository : ITodoRepository
+    public class TodoRepository : ITodoRepository, IDisposable
     {
-        private static ConcurrentDictionary<string, TodoItem> _todos =
-              new ConcurrentDictionary<string, TodoItem>();
 
-        public TodoRepository()
-        {
-            Add(new TodoItem { Name = "Item1" });
-        }
+        private readonly ErrandsDbContext context;
 
-        public IEnumerable<TodoItem> GetAll()
+        public TodoRepository(ErrandsDbContext context)
         {
-            return _todos.Values;
+            this.context = context;
         }
 
         public void Add(TodoItem item)
         {
-            item.Key = Guid.NewGuid().ToString();
-            _todos[item.Key] = item;
+            context.TodoItems.Add(item);
         }
 
         public TodoItem Find(string key)
         {
-            TodoItem item;
-            _todos.TryGetValue(key, out item);
-            return item;
+            return context.TodoItems.Find(key);
         }
 
-        public TodoItem Remove(string key)
+        public IEnumerable<TodoItem> GetAll()
         {
-            TodoItem item;
-            _todos.TryRemove(key, out item);
-            return item;
+            return context.TodoItems.ToList();
+        }
+
+        public void Remove(string key)
+        {
+            TodoItem todoItem = context.TodoItems.Find(key);
+            context.TodoItems.Remove(todoItem);
         }
 
         public void Update(TodoItem item)
         {
-            _todos[item.Key] = item;
+            context.Entry(item).State = EntityState.Modified;
+        }
+
+        public void Save()
+        {
+            context.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 

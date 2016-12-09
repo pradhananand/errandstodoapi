@@ -19,14 +19,14 @@ namespace ErrandsTodoApi.Controllers
             TodoItems = todoItems;
         }
 
-        // GET: api/values
+        // GET: api/todos
         [HttpGet]
         public IEnumerable<TodoItem> Get()
         {
             return TodoItems.GetAll();
         }
 
-        // GET api/values/5
+        // GET api/todo/5
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(string id)
         {
@@ -39,7 +39,7 @@ namespace ErrandsTodoApi.Controllers
         }
 
 
-        // PUT api/values/5
+        // PUT api/todo/5
         [HttpPost]
         public IActionResult Create([FromBody] TodoItem item)
         {
@@ -48,6 +48,7 @@ namespace ErrandsTodoApi.Controllers
                 return BadRequest();
             }
             TodoItems.Add(item);
+            TodoItems.Save();
             return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
@@ -67,10 +68,11 @@ namespace ErrandsTodoApi.Controllers
             }
 
             TodoItems.Update(item);
-            return new NoContentResult();
+            TodoItems.Save();
+            return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
-        // DELETE api/values/5
+        // DELETE api/todo/5
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
@@ -81,7 +83,14 @@ namespace ErrandsTodoApi.Controllers
             }
 
             TodoItems.Remove(id);
+            TodoItems.Save();
             return new NoContentResult();
         }
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    TodoItems.Dispose();
+        //    base.Dispose(disposing);
+        //}
     }
 }
