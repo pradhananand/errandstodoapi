@@ -1,20 +1,13 @@
-﻿using System.Data.Entity;
-using ErrandsTodoApi.Models;
-
+﻿using ErrandsTodoApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ErrandsTodoApi.DAL
 {
-    [DbConfigurationType(typeof(DbConfig))]
     public class ErrandsDbContext : DbContext
     {
-        //static ErrandsDbContext()
-        //{
-        //    //Database.SetInitializer(new ErrandsDbInitializer());
-        //}
-
-        public ErrandsDbContext(string connectionName) :
-            base(connectionName) { }
-
+        public ErrandsDbContext(DbContextOptions<ErrandsDbContext> options) : base(options)
+        {
+        }
         public DbSet<TodoItem> TodoItems { get; set; }
     }
 }

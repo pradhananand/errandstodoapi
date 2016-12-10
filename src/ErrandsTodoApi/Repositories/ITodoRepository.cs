@@ -9,7 +9,7 @@ namespace ErrandsTodoApi.Repositories
     public interface ITodoRepository : IDisposable
     {
         IEnumerable<TodoItem> GetAll();
-        TodoItem Find(string key);
+        Task<TodoItem> Find(string key);
         void Add(TodoItem item);
         void Remove(string key);
         void Update(TodoItem item);

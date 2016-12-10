@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ErrandsTodoApi.DAL;
+﻿using ErrandsTodoApi.DAL;
 using ErrandsTodoApi.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.Swagger.Model;
+
 
 namespace ErrandsTodoApi
 {
@@ -21,6 +17,7 @@ namespace ErrandsTodoApi
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("config.json")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
@@ -32,15 +29,13 @@ namespace ErrandsTodoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add DbContext
-            services.AddScoped(provider =>
-            {
-                var connectionString = Configuration["Data:SampleDb:ConnectionString"];
-                return new ErrandsDbContext(connectionString);
-            });
 
             // Add framework services.
             services.AddMvc();
+
+            // Add framework services.
+            services.AddDbContext<ErrandsDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Add our repository type
             services.AddSingleton<ITodoRepository, TodoRepository>();

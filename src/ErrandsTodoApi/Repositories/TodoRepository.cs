@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using ErrandsTodoApi.Models;
 using ErrandsTodoApi.DAL;
 using System.Linq;
-using System.Data.Entity;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ErrandsTodoApi.Repositories
 {
@@ -22,9 +24,9 @@ namespace ErrandsTodoApi.Repositories
             context.TodoItems.Add(item);
         }
 
-        public TodoItem Find(string key)
+        public async Task<TodoItem> Find(string key)
         {
-            return context.TodoItems.Find(key);
+            return await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
         }
 
         public IEnumerable<TodoItem> GetAll()
@@ -32,9 +34,9 @@ namespace ErrandsTodoApi.Repositories
             return context.TodoItems.ToList();
         }
 
-        public void Remove(string key)
+        public async void Remove(string key)
         {
-            TodoItem todoItem = context.TodoItems.Find(key);
+            TodoItem todoItem = await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
             context.TodoItems.Remove(todoItem);
         }
 
