@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ErrandsTodoApi.DAL;
 using ErrandsTodoApi.Models;
 using ErrandsTodoApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -13,24 +14,25 @@ namespace ErrandsTodoApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : Controller
     {
-        public ITodoRepository TodoItems { get; set; }
-        public TodoController(ITodoRepository todoItems)
+        public ITodoRepository todoRepository { get; set; }
+
+        public TodoController(ITodoRepository todoRepository)
         {
-            TodoItems = todoItems;
+            this.todoRepository = todoRepository;
         }
 
         // GET: api/todos
         [HttpGet]
         public IEnumerable<TodoItem> Get()
         {
-            return TodoItems.GetAll();
+            return todoRepository.GetAll();
         }
 
         // GET api/todo/5
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(string id)
         {
-            var item = TodoItems.Find(id);
+            var item = todoRepository.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -47,8 +49,8 @@ namespace ErrandsTodoApi.Controllers
             {
                 return BadRequest();
             }
-            TodoItems.Add(item);
-            TodoItems.Save();
+            todoRepository.Add(item);
+            todoRepository.Save();
             return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
@@ -61,14 +63,14 @@ namespace ErrandsTodoApi.Controllers
                 return BadRequest();
             }
 
-            var todo = TodoItems.Find(id);
+            var todo = todoRepository.Find(id);
             if (todo == null)
             {
                 return NotFound();
             }
 
-            TodoItems.Update(item);
-            TodoItems.Save();
+            todoRepository.Update(item);
+            todoRepository.Save();
             return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
@@ -76,21 +78,15 @@ namespace ErrandsTodoApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            var todo = TodoItems.Find(id);
+            var todo = todoRepository.Find(id);
             if (todo == null)
             {
                 return NotFound();
             }
 
-            TodoItems.Remove(id);
-            TodoItems.Save();
+            todoRepository.Remove(id);
+            todoRepository.Save();
             return new NoContentResult();
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    TodoItems.Dispose();
-        //    base.Dispose(disposing);
-        //}
     }
 }

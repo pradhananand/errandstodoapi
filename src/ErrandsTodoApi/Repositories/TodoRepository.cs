@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ErrandsTodoApi.Repositories
 {
-    public class TodoRepository : ITodoRepository, IDisposable
+    public class TodoRepository : ITodoRepository
     {
 
         private readonly ErrandsDbContext context;
@@ -48,26 +48,6 @@ namespace ErrandsTodoApi.Repositories
         public void Save()
         {
             context.SaveChanges();
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 

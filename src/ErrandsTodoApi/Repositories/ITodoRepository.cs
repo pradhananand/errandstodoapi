@@ -6,7 +6,7 @@ using ErrandsTodoApi.Models;
 
 namespace ErrandsTodoApi.Repositories
 {
-    public interface ITodoRepository : IDisposable
+    public interface ITodoRepository
     {
         IEnumerable<TodoItem> GetAll();
         Task<TodoItem> Find(string key);

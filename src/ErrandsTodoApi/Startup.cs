@@ -36,6 +36,7 @@ namespace ErrandsTodoApi
             // Add framework services.
             services.AddDbContext<ErrandsDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped(p => new ErrandsDbContext(p.GetService<DbContextOptions<ErrandsDbContext>>()));
 
             // Add our repository type
             services.AddSingleton<ITodoRepository, TodoRepository>();
