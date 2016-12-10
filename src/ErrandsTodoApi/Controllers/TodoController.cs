@@ -41,33 +41,30 @@ namespace ErrandsTodoApi.Controllers
         }
 
 
-        // PUT api/todo/5
         [HttpPost]
-        public IActionResult Create([FromBody] TodoItem item)
+        public IActionResult Post([FromBody]TodoItem todoItem)
         {
-            if (item == null)
+            if (todoItem == null)
             {
                 return BadRequest();
             }
-            todoRepository.Add(item);
-            todoRepository.Save();
-            return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
-        }
+            var todo = todoRepository.Find(todoItem.Key);
+            if(todo == null)
 
-
-        [HttpPut("{id}")]
-        public IActionResult Update(string key)
-        {
-            var todo = todoRepository.Find(key);
-            if (todo == null)
             {
-                return NotFound();
+                todoRepository.Add(todoItem);
+                todoRepository.Save();
+                return new ObjectResult(todoItem);
             }
-
-            todoRepository.Update(todo);
-            todoRepository.Save();
-            return new NoContentResult();
+            else
+            {
+                todo.Name = todoItem.Name;
+                todo.IsComplete = todoItem.IsComplete;
+                todoRepository.Save();
+                return new ObjectResult(todo);
+            }
         }
+
 
         // DELETE api/todo/5
         [HttpDelete("{id}")]
