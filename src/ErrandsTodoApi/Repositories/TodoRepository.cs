@@ -24,9 +24,9 @@ namespace ErrandsTodoApi.Repositories
             context.TodoItems.Add(item);
         }
 
-        public async Task<TodoItem> Find(string key)
+        public TodoItem Find(string key)
         {
-            return await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
+            return context.TodoItems.SingleOrDefault(s => s.Key == key); 
         }
 
         public IEnumerable<TodoItem> GetAll()
@@ -34,9 +34,8 @@ namespace ErrandsTodoApi.Repositories
             return context.TodoItems.ToList();
         }
 
-        public async void Remove(string key)
-        {
-            TodoItem todoItem = await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
+        public void Remove(TodoItem todoItem)
+        { 
             context.TodoItems.Remove(todoItem);
         }
 

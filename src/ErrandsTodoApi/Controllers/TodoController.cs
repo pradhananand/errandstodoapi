@@ -56,22 +56,17 @@ namespace ErrandsTodoApi.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] TodoItem item)
+        public IActionResult Update(string key)
         {
-            if (item == null || item.Key != id)
-            {
-                return BadRequest();
-            }
-
-            var todo = todoRepository.Find(id);
+            var todo = todoRepository.Find(key);
             if (todo == null)
             {
                 return NotFound();
             }
 
-            todoRepository.Update(item);
+            todoRepository.Update(todo);
             todoRepository.Save();
-            return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
+            return new NoContentResult();
         }
 
         // DELETE api/todo/5
@@ -84,7 +79,7 @@ namespace ErrandsTodoApi.Controllers
                 return NotFound();
             }
 
-            todoRepository.Remove(id);
+            todoRepository.Remove(todo);
             todoRepository.Save();
             return new NoContentResult();
         }
