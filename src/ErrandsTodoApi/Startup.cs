@@ -70,7 +70,7 @@ namespace ErrandsTodoApi
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUi();
+            app.UseSwaggerUi("swagger/ui", "/swagger/v1/swagger.json");
 
         }
     }

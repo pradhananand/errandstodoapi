@@ -13,7 +13,6 @@ namespace ErrandsTodoApi.Repositories
         void Add(TodoItem item);
         void Remove(TodoItem item);
         void Update(TodoItem item);
-        void Save();
     }
 
 }

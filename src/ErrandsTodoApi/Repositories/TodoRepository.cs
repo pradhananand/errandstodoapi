@@ -22,6 +22,7 @@ namespace ErrandsTodoApi.Repositories
         public void Add(TodoItem item)
         {
             context.TodoItems.Add(item);
+            Save();
         }
 
         public TodoItem Find(string key)
@@ -37,14 +38,16 @@ namespace ErrandsTodoApi.Repositories
         public void Remove(TodoItem todoItem)
         { 
             context.TodoItems.Remove(todoItem);
+            Save();
         }
 
         public void Update(TodoItem item)
         {
             context.Entry(item).State = EntityState.Modified;
+            Save();
         }
 
-        public void Save()
+        private void Save()
         {
             context.SaveChanges();
         }

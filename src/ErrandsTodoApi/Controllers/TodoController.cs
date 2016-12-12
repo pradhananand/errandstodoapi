@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ErrandsTodoApi.DAL;
+using ErrandsTodoApi.Filters;
 using ErrandsTodoApi.Models;
 using ErrandsTodoApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ErrandsTodoApi.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExceptionFilterAttribute]
     public class TodoController : Controller
     {
         public ITodoRepository todoRepository { get; set; }
@@ -53,14 +55,12 @@ namespace ErrandsTodoApi.Controllers
 
             {
                 todoRepository.Add(todoItem);
-                todoRepository.Save();
                 return new ObjectResult(todoItem);
             }
             else
             {
                 todo.Name = todoItem.Name;
                 todo.IsComplete = todoItem.IsComplete;
-                todoRepository.Save();
                 return new ObjectResult(todo);
             }
         }
@@ -77,7 +77,6 @@ namespace ErrandsTodoApi.Controllers
             }
 
             todoRepository.Remove(todo);
-            todoRepository.Save();
             return new NoContentResult();
         }
     }
