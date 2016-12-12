@@ -19,37 +19,37 @@ namespace ErrandsTodoApi.Repositories
             this.context = context;
         }
 
-        public void Add(TodoItem item)
+        public async void AddAsync(TodoItem item)
         {
             context.TodoItems.Add(item);
-            Save();
+            await SaveAsync();
         }
 
-        public TodoItem Find(string key)
+        public async Task<TodoItem> FindAsync(string key)
         {
-            return context.TodoItems.SingleOrDefault(s => s.Key == key); 
+            return await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
         }
 
-        public IEnumerable<TodoItem> GetAll()
+        public async Task<IEnumerable<TodoItem>> GetAll()
         {
-            return context.TodoItems.ToList();
+            return await context.TodoItems.ToListAsync();
         }
 
-        public void Remove(TodoItem todoItem)
+        public async void RemoveAsync(TodoItem todoItem)
         { 
             context.TodoItems.Remove(todoItem);
-            Save();
+            await SaveAsync();
         }
 
-        public void Update(TodoItem item)
+        public async void UpdateAsync(TodoItem item)
         {
             context.Entry(item).State = EntityState.Modified;
-            Save();
+            await SaveAsync();
         }
 
-        private void Save()
+        private async Task SaveAsync()
         {
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 

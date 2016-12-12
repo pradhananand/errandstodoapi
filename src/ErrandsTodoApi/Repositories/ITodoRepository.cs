@@ -8,11 +8,11 @@ namespace ErrandsTodoApi.Repositories
 {
     public interface ITodoRepository
     {
-        IEnumerable<TodoItem> GetAll();
-        TodoItem Find(string key);
-        void Add(TodoItem item);
-        void Remove(TodoItem item);
-        void Update(TodoItem item);
+        Task<IEnumerable<TodoItem>> GetAll();
+        Task<TodoItem> FindAsync(string key);
+        void AddAsync(TodoItem item);
+        void RemoveAsync(TodoItem item);
+        void UpdateAsync(TodoItem item);
     }
 
 }
