@@ -1,4 +1,5 @@
 ﻿using ErrandsTodoApi.DAL;
+using ErrandsTodoApi.Filters;
 using ErrandsTodoApi.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,15 @@ namespace ErrandsTodoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add service and create Policy with options
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
 
             // Add framework services.
             services.AddMvc();
@@ -37,6 +47,9 @@ namespace ErrandsTodoApi
             services.AddDbContext<ErrandsDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(p => new ErrandsDbContext(p.GetService<DbContextOptions<ErrandsDbContext>>()));
+
+
+            services.AddScoped<ApiExceptionFilterAttribute>();
 
             // Add our repository type
             services.AddSingleton<ITodoRepository, TodoRepository>();
@@ -63,6 +76,9 @@ namespace ErrandsTodoApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            // global policy - assign here or on each controller
+            app.UseCors("CorsPolicy");
 
             app.UseMvc();
 

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ErrandsTodoApi.DAL;
 using ErrandsTodoApi.Filters;
 using ErrandsTodoApi.Models;
 using ErrandsTodoApi.Repositories;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,7 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace ErrandsTodoApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiExceptionFilterAttribute]
+    [EnableCors("CorsPolicy")]
+    [ServiceFilter(typeof(ApiExceptionFilterAttribute))]
     public class TodoController : Controller
     {
         public ITodoRepository todoRepository { get; set; }
