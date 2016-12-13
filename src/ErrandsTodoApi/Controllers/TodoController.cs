@@ -26,7 +26,7 @@ namespace ErrandsTodoApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<TodoItem>> Get()
         {
-            return await todoRepository.GetAll();
+            return await todoRepository.GetAllAsync();
         }
 
         // GET api/todo/5
@@ -43,27 +43,30 @@ namespace ErrandsTodoApi.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]TodoItem todoItem)
+        public async Task<IActionResult> Post([FromBody]TodoItem item)
         {
-            if (todoItem == null)
+            if (item == null)
             {
                 return BadRequest();
             }
-            var todo = await todoRepository.FindAsync(todoItem.Key);
-            if(todo == null)
 
-            {
-                todoRepository.AddAsync(todoItem);
-                return new ObjectResult(todoItem);
-            }
-            else
-            {
-                todo.Name = todoItem.Name;
-                todo.IsComplete = todoItem.IsComplete;
-                return new ObjectResult(todo);
-            }
+            await todoRepository.AddAsync(item);
+            return CreatedAtRoute("GetTodo", new { id = item.Key }, item);
         }
 
+        // Update 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] TodoItem item)
+        {
+            if (item == null || item.Key != id)
+            {
+                return BadRequest();
+            }
+
+            await todoRepository.UpdateAsync(item);
+            await todoRepository.SaveAsync();
+            return new NoContentResult();
+        }
 
         // DELETE api/todo/5
         [HttpDelete("{id}")]
@@ -75,7 +78,7 @@ namespace ErrandsTodoApi.Controllers
                 return NotFound();
             }
 
-            todoRepository.RemoveAsync(todo);
+            await todoRepository.RemoveAsync(todo);
             return new NoContentResult();
         }
     }

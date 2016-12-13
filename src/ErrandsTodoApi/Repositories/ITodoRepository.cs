@@ -8,11 +8,12 @@ namespace ErrandsTodoApi.Repositories
 {
     public interface ITodoRepository
     {
-        Task<IEnumerable<TodoItem>> GetAll();
+        Task<IEnumerable<TodoItem>> GetAllAsync();
         Task<TodoItem> FindAsync(string key);
-        void AddAsync(TodoItem item);
-        void RemoveAsync(TodoItem item);
-        void UpdateAsync(TodoItem item);
+        Task AddAsync(TodoItem item);
+        Task RemoveAsync(TodoItem item);
+        Task UpdateAsync(TodoItem item);
+        Task SaveAsync();
     }
 
 }

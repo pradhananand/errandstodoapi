@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace ErrandsTodoApi.Repositories
 {
@@ -19,38 +20,60 @@ namespace ErrandsTodoApi.Repositories
             this.context = context;
         }
 
-        public async void AddAsync(TodoItem item)
+        public async Task AddAsync(TodoItem item)
         {
+            item.Key = Guid.NewGuid().ToString();
             context.TodoItems.Add(item);
             await SaveAsync();
         }
 
         public async Task<TodoItem> FindAsync(string key)
         {
-            return await context.TodoItems.SingleOrDefaultAsync(s => s.Key == key); 
+            return await context.TodoItems.AsNoTracking().SingleOrDefaultAsync(s => s.Key == key); 
         }
 
-        public async Task<IEnumerable<TodoItem>> GetAll()
+        public async Task<IEnumerable<TodoItem>> GetAllAsync()
         {
-            return await context.TodoItems.ToListAsync();
+            return await context.TodoItems.AsNoTracking().ToListAsync();
         }
 
-        public async void RemoveAsync(TodoItem todoItem)
+        public async Task RemoveAsync(TodoItem todoItem)
         { 
             context.TodoItems.Remove(todoItem);
             await SaveAsync();
         }
 
-        public async void UpdateAsync(TodoItem item)
+        public async Task UpdateAsync(TodoItem item)
         {
-            context.Entry(item).State = EntityState.Modified;
-            await SaveAsync();
+            var _item = await FindAsync(item.Key);
+            if (_item != null)
+            {
+                context.Entry(item).State = EntityState.Modified;
+            }
         }
 
-        private async Task SaveAsync()
+        public async Task SaveAsync()
         {
             await context.SaveChangesAsync();
         }
+
+
+        #region Searching
+        public async Task<int> CountAsync()
+        {
+            return await context.Set<TodoItem>().CountAsync();
+        }
+
+        public async Task<TodoItem> FindAsync(Expression<Func<TodoItem, bool>> match)
+        {
+            return await context.Set<TodoItem>().SingleOrDefaultAsync(match);
+        }
+
+        public async Task<ICollection<TodoItem>> FindAllAsync(Expression<Func<TodoItem, bool>> match)
+        {
+            return await context.Set<TodoItem>().Where(match).ToListAsync();
+        }
+        #endregion
     }
 
 }

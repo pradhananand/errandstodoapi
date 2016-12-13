@@ -27,7 +27,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.AspNetCore.Cors": "1.0.0"
+    "Microsoft.AspNetCore.Cors": "1.0.0",
+    "System.Linq.Expressions": "4.3.0"
   },
 
   "tools": {
